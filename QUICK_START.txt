@@ -1,0 +1,64 @@
+==================================================================================
+                    COVID-19 ANALYSIS - QUICK START GUIDE
+==================================================================================
+
+🚀 ONE COMMAND SETUP (ALL PLATFORMS):
+
+   git clone <repository-url>
+   cd python-scripts
+   bash setup.sh
+
+   ✅ That's it! Works on Windows (Git Bash), macOS, and Linux!
+
+==================================================================================
+
+⚡ ALTERNATIVE METHODS:
+
+   🪟 Windows Users:
+   • Double-click "setup.bat" 
+   • Or: Right-click "setup.ps1" → "Run with PowerShell"
+
+   🍎 macOS/Linux Users:  
+   • chmod +x setup.sh && ./setup.sh
+
+   🐍 Python Direct:
+   • python run.py setup && python run.py all
+
+==================================================================================
+
+📋 REQUIREMENTS:
+   • Python 3.8+ (python.org)
+   • Git (for cloning)
+   • Internet connection
+   • 500MB free space
+
+==================================================================================
+
+📊 WHAT YOU GET:
+   • 29 COVID-19 visualizations
+   • 7 analysis folders
+   • 2 processed datasets (87MB + 180MB)
+   • Complete pandemic analysis (2020-2023)
+
+==================================================================================
+
+⏱️ TIME:
+   • First run: 5-10 minutes
+   • Subsequent runs: 30 seconds (skips existing files)
+
+==================================================================================
+
+🎯 SUCCESS INDICATOR:
+   When complete, you'll see:
+   "🎉 COVID-19 Analysis Environment Ready!"
+   
+   View results in activity1_images/, activity2_images/, etc.
+
+==================================================================================
+
+🆘 ISSUES? 
+   1. Check Python version: python --version (need 3.8+)
+   2. Try: setup.bat (Windows) or python run.py setup
+   3. See README.md for detailed troubleshooting
+
+================================================================================== 

@@ -1,0 +1,25 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+covid_analysis_env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output files that get regenerated
+*.png
+outputs/images/*.png
+outputs/processed/*.csv
+outputs/reports/*.txt 
