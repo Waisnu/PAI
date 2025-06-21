@@ -1,7 +1,29 @@
 #!/usr/bin/env python3
 """
-COVID-19 Activity 4: Regional Analysis
-Run: python activities/activity-4/activity-4.py
+================================================================================
+COVID-19 Data Analysis Project - Activity 4: Regional Analysis
+================================================================================
+
+COURSE: BDSE - Python for AI (PAI) Module
+PROJECT: Worldwide COVID-19 Data Analysis for ABC Health Analytics
+
+ACTIVITY 4 REQUIREMENTS (Project Brief):
+1. Grouped bar chart: New cases by continent and month
+2. Box plot: Total cases by year
+3. Bar plot: Deaths by continent  
+4. Bar plot: Monthly total cases
+
+OUTPUTS:
+- 4 regional analysis visualizations (activity4_images/)
+- Continental comparison insights
+- Temporal analysis by year and month
+
+USAGE: python activities/activity-4/activity-4.py
+
+PREREQUISITES: Run Activities 1-2 first to generate covid_data_processed.csv
+
+DATA SOURCE: covid_data_processed.csv (complete dataset with imputed values)
+================================================================================
 """
 
 import pandas as pd
@@ -20,19 +42,20 @@ def main():
     # Create output folder
     os.makedirs('activity4_images', exist_ok=True)
     
-    # Load processed dataset
-    print("\nLoading processed dataset...")
+    # Load processed dataset from Activities 1-2
+    print("\n1. Loading processed dataset...")
     try:
         df = pd.read_csv('covid_data_processed.csv')
         print(f"[OK] Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
         
+        # Ensure date column is datetime
         if 'date' in df.columns:
             df['date'] = pd.to_datetime(df['date'])
             print(f"[OK] Date range: {df['date'].min()} to {df['date'].max()}")
     
     except FileNotFoundError:
         print("[ERROR] covid_data_processed.csv not found!")
-        print("Please run activity-2 first.")
+        print("Please run activities 1-2 first.")
         return
     
     # Find region column

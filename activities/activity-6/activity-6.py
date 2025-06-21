@@ -1,7 +1,29 @@
 #!/usr/bin/env python3
 """
-COVID-19 Activity 6: Country Analysis
-Run: python activities/activity-6/activity-6.py
+================================================================================
+COVID-19 Data Analysis Project - Activity 6: In-Depth Country Analysis
+================================================================================
+
+COURSE: BDSE - Python for AI (PAI) Module
+PROJECT: Worldwide COVID-19 Data Analysis for ABC Health Analytics
+
+ACTIVITY 6 REQUIREMENTS (Project Brief):
+1. Plot: Total cases and deaths over time (specific country)
+2. User input: Country and metric, plot line chart
+3. Box plot: Total cases by continent
+4. Line plot: Year-wise monthly new cases for selected country
+
+OUTPUTS:
+- 6 country-specific analysis visualizations (activity6_images/)
+- Individual country performance analysis
+- Interactive user-input functionality for country selection
+
+USAGE: python activities/activity-6/activity-6.py
+
+PREREQUISITES: Run Activities 1-2 first to generate covid_data_processed.csv
+
+DATA SOURCE: covid_data_processed.csv (complete dataset with imputed values)
+================================================================================
 """
 
 import pandas as pd
@@ -20,19 +42,20 @@ def main():
     # Create output folder
     os.makedirs('activity6_images', exist_ok=True)
     
-    # Load processed dataset
-    print("\nLoading processed dataset...")
+    # Load processed dataset from Activities 1-2
+    print("\n1. Loading processed dataset...")
     try:
         df = pd.read_csv('covid_data_processed.csv')
         print(f"[OK] Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
         
+        # Ensure date column is datetime
         if 'date' in df.columns:
             df['date'] = pd.to_datetime(df['date'])
             print(f"[OK] Date range: {df['date'].min()} to {df['date'].max()}")
     
     except FileNotFoundError:
         print("[ERROR] covid_data_processed.csv not found!")
-        print("Please run activity-2 first.")
+        print("Please run activities 1-2 first.")
         return
     
     print("\nCreating country-specific analysis visualizations...")

@@ -1,7 +1,29 @@
 #!/usr/bin/env python3
 """
-COVID-19 Activity 7: Summary Dashboard
-Run: python activities/activity-7/activity-7.py
+================================================================================
+COVID-19 Data Analysis Project - Activity 7: Additional Insights
+================================================================================
+
+COURSE: BDSE - Python for AI (PAI) Module
+PROJECT: Worldwide COVID-19 Data Analysis for ABC Health Analytics
+
+ACTIVITY 7 REQUIREMENTS (Project Brief):
+1. Fatality rate over time
+2. Positivity rate vs. total tests (log scale x-axis)
+3. Correlation of fatality rate with smoking (male/female)
+4. Heatmap: Hospital beds vs. fatality rate
+
+OUTPUTS:
+- 2 executive summary dashboard visualizations (activity7_images/)
+- Advanced correlation analysis and insights
+- Comprehensive global pandemic overview
+
+USAGE: python activities/activity-7/activity-7.py
+
+PREREQUISITES: Run Activities 1-2 first to generate covid_data_processed.csv
+
+DATA SOURCE: covid_data_processed.csv (complete dataset with imputed values)
+================================================================================
 """
 
 import pandas as pd
@@ -20,19 +42,20 @@ def main():
     # Create output folder
     os.makedirs('activity7_images', exist_ok=True)
     
-    # Load processed dataset
-    print("\nLoading processed dataset...")
+    # Load processed dataset from Activities 1-2
+    print("\n1. Loading processed dataset...")
     try:
         df = pd.read_csv('covid_data_processed.csv')
         print(f"[OK] Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
         
+        # Ensure date column is datetime
         if 'date' in df.columns:
             df['date'] = pd.to_datetime(df['date'])
             print(f"[OK] Date range: {df['date'].min()} to {df['date'].max()}")
     
     except FileNotFoundError:
         print("[ERROR] covid_data_processed.csv not found!")
-        print("Please run activity-2 first.")
+        print("Please run activities 1-2 first.")
         return
     
     print("\nGenerating comprehensive COVID-19 summary dashboard...")
