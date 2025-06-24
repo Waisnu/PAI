@@ -169,7 +169,7 @@ This project implements all requirements from the BDSE PAI Module:
 
 | Data Exploration Overview | Dataset Timeline |
 | :---: | :---: |
-| ![Data Exploration Overview](activity1_images/1_data_exploration_overview.png) | ![Dataset Timeline](activity1_images/2_dataset_timeline.png) |
+| ![Data Exploration Overview](project-charts-images-backup/activity1_images_backup/1_data_exploration_overview.png) | ![Dataset Timeline](project-charts-images-backup/activity1_images_backup/2_dataset_timeline.png) |
 
 </details>
 
@@ -178,7 +178,7 @@ This project implements all requirements from the BDSE PAI Module:
 
 | Missing Values Before/After | New Features Overview |
 | :---: | :---: |
-| ![Missing Values Before/After](activity2_images/1_missing_values_before_after.png) | ![New Features Overview](activity2_images/2_new_features_overview.png) |
+| ![Missing Values Before/After](project-charts-images-backup/activity2_images_backup/1_missing_values_before_after.png) | ![New Features Overview](project-charts-images-backup/activity2_images_backup/2_new_features_overview.png) |
 
 </details>
 
@@ -187,9 +187,9 @@ This project implements all requirements from the BDSE PAI Module:
 
 | WHO Regions Cases/Deaths | Monthly Worldwide Trend |
 | :---: | :---: |
-| ![WHO Regions Cases/Deaths](activity3_images/3.1_who_regions_cases_deaths.png) | ![Monthly Worldwide Trend](activity3_images/3.2_monthly_worldwide_trend.png) |
+| ![WHO Regions Cases/Deaths](project-charts-images-backup/activity3_images_backup/3.1_who_regions_cases_deaths.png) | ![Monthly Worldwide Trend](project-charts-images-backup/activity3_images_backup/3.2_monthly_worldwide_trend.png) |
 | **Correlation Heatmap** | **Cases Evolution in India** |
-| ![Correlation Heatmap](activity3_images/3_correlation_heatmap_cases_deaths.png) | ![Cases Evolution in India](activity3_images/4_evolution_total_cases_india.png) |
+| ![Correlation Heatmap](project-charts-images-backup/activity3_images_backup/3_correlation_heatmap_cases_deaths.png) | ![Cases Evolution in India](project-charts-images-backup/activity3_images_backup/4_evolution_total_cases_india.png) |
 
 </details>
 
@@ -198,9 +198,9 @@ This project implements all requirements from the BDSE PAI Module:
 
 | New Cases by Region/Month | Total Cases by Year (Box Plot) |
 | :---: | :---: |
-| ![New Cases by Region/Month](activity4_images/4.1_new_cases_by_region_month.png) | ![Total Cases by Year (Box Plot)](activity4_images/4.2_total_cases_by_year_boxplot.png) |
+| ![New Cases by Region/Month](project-charts-images-backup/activity4_images_backup/4.1_new_cases_by_region_month.png) | ![Total Cases by Year (Box Plot)](project-charts-images-backup/activity4_images_backup/4.2_total_cases_by_year_boxplot.png) |
 | **Total Deaths by Region** | **Monthly Analysis** |
-| ![Total Deaths by Region](activity4_images/4.3_total_deaths_by_region.png) | ![Monthly Analysis](activity4_images/4.4_monthly_analysis.png) |
+| ![Total Deaths by Region](project-charts-images-backup/activity4_images_backup/4.3_total_deaths_by_region.png) | ![Monthly Analysis](project-charts-images-backup/activity4_images_backup/4.4_monthly_analysis.png) |
 
 </details>
 
@@ -209,9 +209,9 @@ This project implements all requirements from the BDSE PAI Module:
 
 | Daily Trends and Averages | Global Vaccination Trends |
 | :---: | :---: |
-| ![Daily Trends and Averages](activity5_images/5.1_daily_trends_and_averages.png) | ![Global Vaccination Trends](activity5_images/5.2_global_vaccination_trends.png) |
+| ![Daily Trends and Averages](project-charts-images-backup/activity5_images_backup/5.1_daily_trends_and_averages.png) | ![Global Vaccination Trends](project-charts-images-backup/activity5_images_backup/5.2_global_vaccination_trends.png) |
 | **Testing and Positivity Trends** |
-| ![Testing and Positivity Trends](activity5_images/5.3_testing_and_positivity_trends.png) |
+| ![Testing and Positivity Trends](project-charts-images-backup/activity5_images_backup/5.3_testing_and_positivity_trends.png) |
 
 </details>
 
@@ -220,9 +220,9 @@ This project implements all requirements from the BDSE PAI Module:
 
 | Country Evolution (USA) | Cases by Continent (Box Plot) |
 | :---: | :---: |
-| ![Country Evolution (USA)](activity6_images/6.1_country_evolution_United_States.png) | ![Cases by Continent (Box Plot)](activity6_images/6.2_cases_by_continent_boxplot.png) |
+| ![Country Evolution (USA)](project-charts-images-backup/activity6_images_backup/6.1_country_evolution_United_States.png) | ![Cases by Continent (Box Plot)](project-charts-images-backup/activity6_images_backup/6.2_cases_by_continent_boxplot.png) |
 | **Monthly Trend (USA)** |
-| ![Monthly Trend (USA)](activity6_images/6.3_monthly_trend_United_States.png) |
+| ![Monthly Trend (USA)](project-charts-images-backup/activity6_images_backup/6.3_monthly_trend_United_States.png) |
 
 </details>
 
@@ -231,13 +231,15 @@ This project implements all requirements from the BDSE PAI Module:
 
 | Global Fatality Rate | Positivity Rate vs. Tests |
 | :---: | :---: |
-| ![Global Fatality Rate](activity7_images/7.1_global_fatality_rate_over_time.png) | ![Positivity Rate vs. Tests](activity7_images/7.2_positivity_rate_vs_total_tests.png) |
+| ![Global Fatality Rate](project-charts-images-backup/activity7_images_backup/7.1_global_fatality_rate_over_time.png) | ![Positivity Rate vs. Tests](project-charts-images-backup/activity7_images_backup/7.2_positivity_rate_vs_total_tests.png) |
 | **Fatality vs. Smoking** | **Hospital Beds vs. Fatality** |
-| ![Fatality vs. Smoking](activity7_images/7.3_fatality_rate_vs_smoking.png) | ![Hospital Beds vs. Fatality](activity7_images/7.4_hospital_beds_vs_fatality_rate.png) |
+| ![Fatality vs. Smoking](project-charts-images-backup/activity7_images_backup/7.3_fatality_rate_vs_smoking.png) | ![Hospital Beds vs. Fatality](project-charts-images-backup/activity7_images_backup/7.4_hospital_beds_vs_fatality_rate.png) |
 
 </details>
 
-___
+
+---
+
 ## 🆘️ **Troubleshooting**
 
 ### ⚠️ **"Python not found"**
@@ -287,3 +289,4 @@ python run.py all     # Run the full analysis pipeline
 npm --version
 node --version
 ```
+
