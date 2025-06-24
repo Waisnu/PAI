@@ -42,10 +42,10 @@ def main():
     # Create output folder
     os.makedirs('activity3_images', exist_ok=True)
     
-    # Load cleaned dataset (no more processed CSV!)
+    # Load cleaned dataset
     print("\nLoading cleaned dataset...")
     try:
-        df = pd.read_csv('covid_data_cleaned.csv')
+        df = pd.read_csv('covid_data_processed.csv')
         print(f"[OK] Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
         
         if 'date' in df.columns:
@@ -59,7 +59,7 @@ def main():
             df['year_month'] = df['date'].dt.to_period('M')
     
     except FileNotFoundError:
-        print("[ERROR] covid_data_cleaned.csv not found!")
+        print("[ERROR] covid_data_processed.csv not found!")
         print("Please run activity-1 and activity-2 first.")
         return
     
@@ -97,7 +97,7 @@ def main():
         ax1.set_title('Total COVID-19 Cases by WHO Region')
         ax1.set_xlabel('WHO Region')
         ax1.set_ylabel('Total Cases')
-        ax1.tick_params(axis='x', rotation=45, ha='right')
+        ax1.tick_params(axis='x', rotation=45)
         
         # Add value labels on bars
         for bar, value in zip(bars1, regional_data['total_cases']):
@@ -110,7 +110,7 @@ def main():
         ax2.set_title('Total COVID-19 Deaths by WHO Region')
         ax2.set_xlabel('WHO Region')
         ax2.set_ylabel('Total Deaths')
-        ax2.tick_params(axis='x', rotation=45, ha='right')
+        ax2.tick_params(axis='x', rotation=45)
         
         # Add value labels on bars
         for bar, value in zip(bars2, regional_data['total_deaths']):
@@ -120,12 +120,12 @@ def main():
         plt.tight_layout()
         plt.savefig('activity3_images/3.1_who_regions_cases_deaths.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] who_regions_cases_deaths.png")
+        print("[OK] Saved: who_regions_cases_deaths.png")
         
         # Print summary
         print(f"WHO Regions summary:")
         for _, row in regional_data.iterrows():
-            print(f"  - {row[who_region_col]}: {row['total_cases']:,.0f} cases, {row['total_deaths']:,.0f} deaths")
+            print(f"- {row[who_region_col]}: {row['total_cases']:,.0f} cases, {row['total_deaths']:,.0f} deaths")
     else:
         print("[ERROR] No WHO region column found in dataset!")
     
@@ -167,7 +167,7 @@ def main():
         plt.tight_layout()
         plt.savefig('activity3_images/3.2_monthly_worldwide_trend.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] monthly_worldwide_trend.png")
+        print("[OK] Saved: monthly_worldwide_trend.png")
         print(f"[OK] Peak month: {max_date.strftime('%B %Y')} with {max_cases:,} cases")
         print(f"[OK] Total months analyzed: {len(monthly_cases)}")
     else:
@@ -207,22 +207,22 @@ def main():
         plt.title('Correlation Matrix: Total Cases vs Total Deaths\n(and other COVID-19 metrics)', 
                  fontsize=14, fontweight='bold')
         plt.tight_layout()
-        plt.savefig('activity3_images/3.3_correlation_heatmap.png', dpi=300, bbox_inches='tight')
+        plt.savefig('activity3_images/3_correlation_heatmap_cases_deaths.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] correlation_heatmap.png")
+        print("[OK] Correlation heatmap saved.")
         
         # Print key correlations
         cases_deaths_corr = correlation_matrix.loc['total_cases', 'total_deaths']
         print(f"[OK] Correlation between total cases and total deaths: {cases_deaths_corr:.3f}")
         
         if cases_deaths_corr > 0.8:
-            print("     → Very strong positive correlation")
+            print("     -> Very strong positive correlation")
         elif cases_deaths_corr > 0.6:
-            print("     → Strong positive correlation")
+            print("     -> Strong positive correlation")
         elif cases_deaths_corr > 0.4:
-            print("     → Moderate positive correlation")
+            print("     -> Moderate positive correlation")
         else:
-            print("     → Weak correlation")
+            print("     -> Weak correlation")
     else:
         print("[ERROR] Required columns for correlation analysis not found!")
     
@@ -248,49 +248,41 @@ def main():
             plt.xticks(rotation=45)
             plt.grid(True, alpha=0.3)
             
-            # Add key milestones
-            max_cases = india_data['total_cases'].max()
-            max_date = india_data[india_data['total_cases'] == max_cases]['date'].iloc[0]
-            
-            plt.annotate(f'Peak: {max_cases:,.0f} cases\n{max_date.strftime("%B %d, %Y")}',
-                        xy=(max_date, max_cases), xytext=(50, -50), 
-                        textcoords='offset points',
-                        bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.8),
-                        arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=-0.3', lw=2))
-            
-            # Add some key dates for India
-            plt.axvline(x=pd.to_datetime('2020-03-24'), color='red', linestyle='--', alpha=0.7, label='India Lockdown')
-            plt.axvline(x=pd.to_datetime('2021-01-16'), color='green', linestyle='--', alpha=0.7, label='Vaccination Start')
-            plt.legend()
+            # Annotate major waves
+            wave1_peak = india_data[india_data['date'] == pd.to_datetime('2021-05-08')]
+            if not wave1_peak.empty:
+                plt.annotate('Second Wave Peak (Delta)', 
+                             xy=(wave1_peak['date'].iloc[0], wave1_peak['total_cases'].iloc[0]),
+                             xytext=(wave1_peak['date'].iloc[0] - pd.Timedelta(days=200), wave1_peak['total_cases'].iloc[0] * 0.8),
+                             arrowprops=dict(facecolor='black', shrink=0.05),
+                             bbox=dict(boxstyle="round,pad=0.3", fc="cyan", ec="b", lw=2))
+
+            wave2_peak = india_data[india_data['date'] == pd.to_datetime('2022-01-21')]
+            if not wave2_peak.empty:
+                plt.annotate('Third Wave Peak (Omicron)',
+                             xy=(wave2_peak['date'].iloc[0], wave2_peak['total_cases'].iloc[0]),
+                             xytext=(wave2_peak['date'].iloc[0] - pd.Timedelta(days=200), wave2_peak['total_cases'].iloc[0] * 1.05),
+                             arrowprops=dict(facecolor='black', shrink=0.05),
+                             bbox=dict(boxstyle="round,pad=0.3", fc="yellow", ec="orange", lw=2))
             
             plt.tight_layout()
-            plt.savefig('activity3_images/3.4_india_cases_evolution.png', dpi=300, bbox_inches='tight')
+            plt.savefig('activity3_images/3.3_evolution_total_cases_india.png', dpi=300, bbox_inches='tight')
             plt.close()
-            print("[SAVED] india_cases_evolution.png")
+            print("[OK] India total cases evolution plot saved.")
             
             # Print India summary
-            first_case_date = india_data[india_data['total_cases'] > 0]['date'].min()
-            total_records = len(india_data)
-            print(f"[OK] India analysis summary:")
-            print(f"     - First recorded case: {first_case_date.strftime('%B %d, %Y')}")
-            print(f"     - Peak cases: {max_cases:,} on {max_date.strftime('%B %d, %Y')}")
-            print(f"     - Total data points: {total_records}")
-            print(f"     - Data period: {india_data['date'].min().strftime('%Y-%m-%d')} to {india_data['date'].max().strftime('%Y-%m-%d')}")
+            print("[OK] India Summary:")
+            print(f" - Latest Total Cases: {india_data['total_cases'].iloc[-1]:,.0f}")
+            print(f" - Latest Total Deaths: {india_data['total_deaths'].iloc[-1]:,.0f}")
         else:
-            print("[ERROR] No data found for India!")
-            print("Available locations include:", df['location'].unique()[:10])
+            print("[WARNING] No data found for India")
     else:
-        print("[ERROR] Required columns 'location' or 'total_cases' not found!")
+        print("[ERROR] Required columns not found for India analysis!")
     
-    # Final summary
-    print(f"\n=== ACTIVITY 3 SUMMARY ===")
-    print(f"✓ WHO Regions visualization: Cases and deaths by region")
-    print(f"✓ Monthly worldwide trend: Line plot of global cases over time")  
-    print(f"✓ Correlation analysis: Heatmap showing relationship between cases and deaths")
-    print(f"✓ India-specific analysis: Total cases evolution over time")
-    print(f"✓ 4 visualizations created in 'activity3_images' folder")
-    
-    print(f"\n*** Activity 3 Complete! Check 'activity3_images' folder for plots. ***")
+    print("\n" + "="*60)
+    print("ACTIVITY 3 COMPLETE!")
+    print("Check 'activity3_images' folder for visualizations.")
+    print("="*60)
 
 if __name__ == "__main__":
     main() 

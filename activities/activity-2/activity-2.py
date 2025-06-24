@@ -50,19 +50,19 @@ def main():
     print("-" * 50)
     try:
         df = pd.read_csv('covid_data_cleaned.csv')
-        print(f"✅ Loaded cleaned dataset: {df.shape[0]:,} rows × {df.shape[1]} columns")
+        print(f"[OK] Loaded cleaned dataset: {df.shape[0]:,} rows x {df.shape[1]} columns")
         
         # Ensure date column is datetime
         if 'date' in df.columns:
             df['date'] = pd.to_datetime(df['date'])
-            print(f"✅ Date range: {df['date'].min()} to {df['date'].max()}")
+            print(f"[OK] Date range: {df['date'].min()} to {df['date'].max()}")
         
         # Check file size
         file_size_mb = os.path.getsize('covid_data_cleaned.csv') / (1024 * 1024)
-        print(f"✅ Input file size: {file_size_mb:.1f} MB")
+        print(f"[OK] Input file size: {file_size_mb:.1f} MB")
     
     except FileNotFoundError:
-        print("❌ ERROR: covid_data_cleaned.csv not found!")
+        print("[ERROR] covid_data_cleaned.csv not found!")
         print("   Please run Activity 1 first.")
         return
     
@@ -75,15 +75,15 @@ def main():
     missing_by_col = df.isnull().sum()
     cols_with_missing = missing_by_col[missing_by_col > 0]
     
-    print(f"📊 BEFORE IMPUTATION:")
-    print(f"   • Total missing values: {missing_before:,}")
-    print(f"   • Columns with missing values: {len(cols_with_missing)}")
+    print(f"BEFORE IMPUTATION:")
+    print(f"- Total missing values: {missing_before:,}")
+    print(f"- Columns with missing values: {len(cols_with_missing)}")
     
     if len(cols_with_missing) > 0:
-        print(f"\n🔍 TOP 10 COLUMNS WITH MISSING VALUES:")
+        print(f"\nTOP 10 COLUMNS WITH MISSING VALUES:")
         for col, count in cols_with_missing.head(10).items():
             pct = (count / len(df)) * 100
-            print(f"   • {col}: {count:,} ({pct:.1f}%)")
+            print(f"- {col}: {count:,} ({pct:.1f}%)")
     
     # Get numerical and categorical columns
     numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
@@ -94,9 +94,9 @@ def main():
         categorical_cols.remove('date')
     
     # Imputation strategy
-    print(f"\n💡 IMPUTATION STRATEGY:")
-    print(f"   • Numerical columns ({len(numerical_cols)}): Median imputation")
-    print(f"   • Categorical columns ({len(categorical_cols)}): Mode imputation")
+    print(f"\nIMPUTATION STRATEGY:")
+    print(f"- Numerical columns ({len(numerical_cols)}): Median imputation")
+    print(f"- Categorical columns ({len(categorical_cols)}): Mode imputation")
     
     # Track imputation statistics
     imputation_stats = []
@@ -129,32 +129,32 @@ def main():
             })
     
     missing_after = df.isnull().sum().sum()
-    print(f"\n✅ IMPUTATION COMPLETE:")
-    print(f"   • Missing values: {missing_before:,} → {missing_after:,}")
-    print(f"   • Imputed {len(imputation_stats)} columns")
+    print(f"\nIMPUTATION COMPLETE:")
+    print(f"- Missing values: {missing_before:,} -> {missing_after:,}")
+    print(f"- Imputed {len(imputation_stats)} columns")
     
     # 2. Remove duplicate rows from DataFrame
     print("\n3. REMOVING DUPLICATE ROWS")
     print("-" * 50)
     
     duplicates_before = df.duplicated().sum()
-    print(f"🔍 Duplicate rows found: {duplicates_before:,}")
+    print(f"Duplicate rows found: {duplicates_before:,}")
     
     if duplicates_before > 0:
         # Show some example duplicates
         duplicate_rows = df[df.duplicated()]
-        print(f"📋 Example duplicate rows (first 3):")
+        print(f"Example duplicate rows (first 3):")
         example_cols = ['location', 'date', 'total_cases', 'total_deaths']
         available_cols = [col for col in example_cols if col in duplicate_rows.columns]
         if len(available_cols) > 0:
             print(duplicate_rows[available_cols].head(3).to_string(index=False))
         
         df = df.drop_duplicates()
-        print(f"✅ Removed {duplicates_before:,} duplicate rows")
+        print(f"Removed {duplicates_before:,} duplicate rows")
     else:
-        print(f"✅ No duplicate rows found - data is already unique")
+        print(f"No duplicate rows found - data is already unique")
     
-    print(f"✅ Final shape after deduplication: {df.shape}")
+    print(f"Final shape after deduplication: {df.shape}")
     
     # 3. Create new features (extract year and month from date column)
     print("\n4. CREATING NEW FEATURES FROM DATE")
@@ -171,20 +171,20 @@ def main():
         df['day_of_year'] = df['date'].dt.dayofyear
         df['week_of_year'] = df['date'].dt.isocalendar().week
         
-        print(f"✅ CREATED NEW FEATURES:")
-        print(f"   • year: {df['year'].min()} to {df['year'].max()}")
-        print(f"   • month: {df['month'].min()} to {df['month'].max()}")
-        print(f"   • month_name: {df['month_name'].nunique()} unique month names")
-        print(f"   • quarter: {df['quarter'].nunique()} quarters")
-        print(f"   • day_of_year: 1 to 366")
-        print(f"   • week_of_year: 1 to 53")
+        print(f"CREATED NEW FEATURES:")
+        print(f"- year: {df['year'].min()} to {df['year'].max()}")
+        print(f"- month: {df['month'].min()} to {df['month'].max()}")
+        print(f"- month_name: {df['month_name'].nunique()} unique month names")
+        print(f"- quarter: {df['quarter'].nunique()} quarters")
+        print(f"- day_of_year: 1 to 366")
+        print(f"- week_of_year: 1 to 53")
         
         # Show sample of new features
-        print(f"\n📋 SAMPLE OF NEW DATE FEATURES:")
+        print(f"\nSAMPLE OF NEW DATE FEATURES:")
         sample_cols = ['date', 'year', 'month', 'month_name', 'quarter']
         print(df[sample_cols].head().to_string(index=False))
     else:
-        print("❌ ERROR: 'date' column not found!")
+        print("ERROR: 'date' column not found!")
     
     # 4. Explore unique countries and count total
     print("\n5. EXPLORING UNIQUE COUNTRIES")
@@ -194,11 +194,11 @@ def main():
         unique_countries = df['location'].unique()
         total_countries = len(unique_countries)
         
-        print(f"✅ COUNTRY ANALYSIS:")
-        print(f"   • Total countries/locations: {total_countries}")
+        print(f"COUNTRY ANALYSIS:")
+        print(f"- Total countries/locations: {total_countries}")
         
         # Show some examples
-        print(f"\n📋 FIRST 15 COUNTRIES/LOCATIONS:")
+        print(f"\nFIRST 15 COUNTRIES/LOCATIONS:")
         for i, country in enumerate(unique_countries[:15], 1):
             print(f"   {i:2d}. {country}")
         
@@ -207,12 +207,12 @@ def main():
         
         # Show data coverage per country
         country_coverage = df['location'].value_counts().head(10)
-        print(f"\n📊 TOP 10 COUNTRIES BY RECORD COUNT:")
+        print(f"\nTOP 10 COUNTRIES BY RECORD COUNT:")
         for country, count in country_coverage.items():
             records_per_day = count / ((df['date'].max() - df['date'].min()).days + 1)
-            print(f"   • {country}: {count:,} records ({records_per_day:.1f}/day avg)")
+            print(f"- {country}: {count:,} records ({records_per_day:.1f}/day avg)")
     else:
-        print("❌ ERROR: 'location' column not found!")
+        print("ERROR: 'location' column not found!")
     
     # Create visualizations for Activity 2
     print("\n6. CREATING FEATURE ENGINEERING VISUALIZATIONS")
@@ -244,73 +244,60 @@ def main():
     plt.tight_layout()
     plt.savefig('activity2_images/1_missing_values_before_after.png', dpi=300, bbox_inches='tight')
     plt.close()
-    print("✅ Saved: missing_values_before_after.png")
+    print("[OK] Saved: missing_values_before_after.png")
     
     # Visualization 2: New Features Overview
     if 'year' in df.columns and 'month' in df.columns:
-        fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(16, 12))
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 7))
         
-        # Records by year
+        # Bar chart for records per year
         year_counts = df['year'].value_counts().sort_index()
-        ax1.bar(year_counts.index, year_counts.values, color='steelblue', alpha=0.8)
-        ax1.set_title('Records by Year', fontweight='bold')
+        ax1.bar(year_counts.index, year_counts.values, color='skyblue')
+        ax1.set_title('Data Distribution by Year', fontweight='bold')
         ax1.set_xlabel('Year')
         ax1.set_ylabel('Number of Records')
+        ax1.set_xticks(year_counts.index)
         
-        # Records by month
-        month_counts = df['month'].value_counts().sort_index()
-        ax2.bar(month_counts.index, month_counts.values, color='green', alpha=0.8)
-        ax2.set_title('Records by Month', fontweight='bold')
+        # Line chart for records per month
+        month_counts = df.groupby('month')['date'].count()
+        ax2.plot(month_counts.index, month_counts.values, marker='o', linestyle='-', color='salmon')
+        ax2.set_title('Data Distribution by Month (Across All Years)', fontweight='bold')
         ax2.set_xlabel('Month')
         ax2.set_ylabel('Number of Records')
+        ax2.set_xticks(range(1, 13))
         
-        # Records by quarter
-        if 'quarter' in df.columns:
-            quarter_counts = df['quarter'].value_counts().sort_index()
-            ax3.bar(quarter_counts.index, quarter_counts.values, color='orange', alpha=0.8)
-            ax3.set_title('Records by Quarter', fontweight='bold')
-            ax3.set_xlabel('Quarter')
-            ax3.set_ylabel('Number of Records')
-        
-        # Country coverage
-        top_countries = df['location'].value_counts().head(10)
-        ax4.barh(range(len(top_countries)), top_countries.values, color='purple', alpha=0.8)
-        ax4.set_title('Top 10 Countries by Records', fontweight='bold')
-        ax4.set_xlabel('Number of Records')
-        ax4.set_yticks(range(len(top_countries)))
-        ax4.set_yticklabels(top_countries.index)
-        
-        plt.tight_layout()
+        fig.suptitle('Overview of New Date-Based Features', fontsize=16, fontweight='bold')
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         plt.savefig('activity2_images/2_new_features_overview.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("✅ Saved: new_features_overview.png")
+        print("[OK] Saved: new_features_overview.png")
     
     # Save the FINAL processed dataset for Activities 3-7
+    output_file = 'covid_data_processed.csv'
+    
     print(f"\n7. SAVING FINAL PROCESSED DATASET")
     print("-" * 50)
-    
-    output_file = 'covid_data_processed.csv'
     df.to_csv(output_file, index=False)
     
     # Check file size
     file_size_mb = os.path.getsize(output_file) / (1024 * 1024)
     
-    print(f"✅ Saved as: {output_file}")
-    print(f"✅ File size: {file_size_mb:.1f} MB")
-    print(f"✅ Final dataset: {df.shape[0]:,} rows × {df.shape[1]} columns")
-    print(f"✅ Ready for Activities 3-7")
+    print(f"[OK] Saved as: {output_file}")
+    print(f"[OK] File size: {file_size_mb:.1f} MB")
+    print(f"[OK] Final dataset: {df.shape[0]:,} rows x {df.shape[1]} columns")
+    print(f"[OK] Ready for Activities 3-7")
     
     # Final summary
     print(f"\n" + "="*70)
     print("ACTIVITY 2 COMPLETE - SUMMARY")
     print(f"="*70)
-    print(f"✅ Missing values imputed: {missing_before:,} → {missing_after:,}")
-    print(f"✅ Duplicate rows removed: {duplicates_before:,}")
-    print(f"✅ New features created: 6 date-based features")
-    print(f"✅ Countries explored: {df['location'].nunique() if 'location' in df.columns else 'N/A'}")
-    print(f"✅ 2 visualizations created")
-    print(f"✅ Final processed dataset saved for Activities 3-7")
-    print(f"\n🎯 NEXT: Run Activities 3-7 for analysis and visualization")
+    print(f"- Missing values imputed: {missing_before:,} -> {missing_after:,}")
+    print(f"- Duplicate rows removed: {duplicates_before:,}")
+    print(f"- New features created: 6 date-based features")
+    print(f"- Countries explored: {df['location'].nunique() if 'location' in df.columns else 'N/A'}")
+    print(f"- 2 visualizations created")
+    print(f"- Final processed dataset saved for Activities 3-7")
+    print(f"\nNEXT: Run Activities 3-7 for analysis and visualization")
 
 if __name__ == "__main__":
     main() 

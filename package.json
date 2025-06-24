@@ -1,0 +1,37 @@
+{
+  "name": "covid-19-data-analysis",
+  "version": "1.0.0",
+  "description": "Comprehensive COVID-19 data analysis system with automated setup",
+  "main": "run.py",
+  "scripts": {
+    "setup": "node setup.js",
+    "activity-1": "python activities/activity-1/activity-1.py",
+    "activity-2": "python activities/activity-2/activity-2.py",
+    "activity-3": "python activities/activity-3/activity-3.py",
+    "activity-4": "python activities/activity-4/activity-4.py",
+    "activity-5": "python activities/activity-5/activity-5.py",
+    "activity-6": "python activities/activity-6/activity-6.py",
+    "activity-7": "python activities/activity-7/activity-7.py",
+    "all": "python run.py all",
+    "clean": "python run.py clean",
+    "start": "python run.py all"
+  },
+  "keywords": [
+    "covid-19",
+    "data-analysis",
+    "python",
+    "pandas",
+    "matplotlib",
+    "seaborn",
+    "visualization"
+  ],
+  "author": "BDSE-0922-114-Jhonn-Vincent-Arcipe",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Waisnu/PAI"
+  },
+  "engines": {
+    "python": ">=3.8"
+  }
+} 

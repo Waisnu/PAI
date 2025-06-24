@@ -51,26 +51,26 @@ def main():
     print("-" * 50)
     try:
         df = pd.read_csv("data/owid-covid-data.csv")
-        print(f"✅ Dataset loaded successfully from data/owid-covid-data.csv")
-        print(f"✅ Original Shape: {df.shape[0]:,} rows, {df.shape[1]} columns")
-        print(f"✅ Memory usage: ~{df.memory_usage(deep=True).sum() / 1024**2:.1f} MB")
+        print(f"[OK] Dataset loaded successfully from data/owid-covid-data.csv")
+        print(f"[OK] Original Shape: {df.shape[0]:,} rows, {df.shape[1]} columns")
+        print(f"[OK] Memory usage: ~{df.memory_usage(deep=True).sum() / 1024**2:.1f} MB")
     except FileNotFoundError:
-        print("❌ ERROR: data/owid-covid-data.csv not found!")
+        print("[ERROR] data/owid-covid-data.csv not found!")
         return
     
     # 2. Show first and last 5 rows
     print("\n2. DISPLAYING FIRST AND LAST 5 ROWS")
     print("-" * 50)
-    print("\n📊 FIRST 5 ROWS:")
+    print("\nFIRST 5 ROWS:")
     print(df.head().to_string())
-    print("\n📊 LAST 5 ROWS:")
+    print("\nLAST 5 ROWS:")
     print(df.tail().to_string())
     
     # Show basic info about the dataset
-    print(f"\n📈 DATASET OVERVIEW:")
-    print(f"   • Date range: {df['date'].min()} to {df['date'].max()}")
-    print(f"   • Countries/Regions: {df['location'].nunique()}")
-    print(f"   • Total records: {len(df):,}")
+    print(f"\nDATASET OVERVIEW:")
+    print(f"- Date range: {df['date'].min()} to {df['date'].max()}")
+    print(f"- Countries/Regions: {df['location'].nunique()}")
+    print(f"- Total records: {len(df):,}")
     
     # 3. Check and handle missing values (ANALYSIS ONLY)
     print("\n3. CHECKING FOR MISSING VALUES")
@@ -88,53 +88,53 @@ def main():
     total_missing = missing_count.sum()
     cols_with_missing = (missing_count > 0).sum()
     
-    print(f"📊 MISSING VALUES ANALYSIS:")
-    print(f"   • Total missing values: {total_missing:,}")
-    print(f"   • Columns with missing data: {cols_with_missing}/{len(df.columns)}")
-    print(f"   • Dataset completeness: {((1 - total_missing/(len(df)*len(df.columns)))*100):.1f}%")
+    print(f"MISSING VALUES ANALYSIS:")
+    print(f"- Total missing values: {total_missing:,}")
+    print(f"- Columns with missing data: {cols_with_missing}/{len(df.columns)}")
+    print(f"- Dataset completeness: {((1 - total_missing/(len(df)*len(df.columns)))*100):.1f}%")
     
     # Show top columns with missing values
-    print(f"\n🔍 TOP 10 COLUMNS WITH MOST MISSING VALUES:")
+    print(f"\nTOP 10 COLUMNS WITH MOST MISSING VALUES:")
     top_missing = missing_summary.head(10)
     for _, row in top_missing.iterrows():
-        print(f"   • {row['Column']}: {row['Missing_Count']:,} ({row['Missing_Percentage']:.1f}%)")
+        print(f"- {row['Column']}: {row['Missing_Count']:,} ({row['Missing_Percentage']:.1f}%)")
     
     # 4. Drop columns with >90% missing values
-    print("\n4. DROPPING COLUMNS WITH >90% MISSING VALUES")
+    print("\nDROPPING COLUMNS WITH >90% MISSING VALUES")
     print("-" * 50)
     
     cols_to_drop = missing_summary[missing_summary['Missing_Percentage'] > 90]['Column'].tolist()
     
-    print(f"🗑️  COLUMNS TO BE DROPPED ({len(cols_to_drop)} columns):")
+    print(f"COLUMNS TO BE DROPPED ({len(cols_to_drop)} columns):")
     if cols_to_drop:
         for col in cols_to_drop:
             pct = missing_summary[missing_summary['Column'] == col]['Missing_Percentage'].iloc[0]
-            print(f"   • {col}: {pct:.1f}% missing")
+            print(f"- {col}: {pct:.1f}% missing")
     else:
-        print("   • No columns have >90% missing data")
+        print("- No columns have >90% missing data")
     
     # Apply the column dropping
     df_cleaned = df.drop(columns=cols_to_drop)
-    print(f"\n✅ STRUCTURE CLEANED:")
-    print(f"   • Before: {df.shape[0]:,} rows × {df.shape[1]} columns")
-    print(f"   • After:  {df_cleaned.shape[0]:,} rows × {df_cleaned.shape[1]} columns")
-    print(f"   • Removed: {len(cols_to_drop)} unnecessary columns")
+    print(f"\nSTRUCTURE CLEANED:")
+    print(f"- Before: {df.shape[0]:,} rows x {df.shape[1]} columns")
+    print(f"- After:  {df_cleaned.shape[0]:,} rows x {df_cleaned.shape[1]} columns")
+    print(f"- Removed: {len(cols_to_drop)} unnecessary columns")
     
     # 5. Convert 'date' column to datetime
-    print("\n5. CONVERTING DATE COLUMN TO DATETIME")
+    print("\nCONVERTING DATE COLUMN TO DATETIME")
     print("-" * 50)
     
     if 'date' in df_cleaned.columns:
-        print(f"📅 Before: {df_cleaned['date'].dtype}")
+        print(f"BEFORE: {df_cleaned['date'].dtype}")
         df_cleaned['date'] = pd.to_datetime(df_cleaned['date'])
-        print(f"📅 After:  {df_cleaned['date'].dtype}")
-        print(f"✅ Date range: {df_cleaned['date'].min()} to {df_cleaned['date'].max()}")
-        print(f"✅ Total days: {(df_cleaned['date'].max() - df_cleaned['date'].min()).days}")
+        print(f"AFTER:  {df_cleaned['date'].dtype}")
+        print(f"DATE RANGE: {df_cleaned['date'].min()} to {df_cleaned['date'].max()}")
+        print(f"TOTAL DAYS: {(df_cleaned['date'].max() - df_cleaned['date'].min()).days}")
     else:
-        print("❌ ERROR: 'date' column not found!")
+        print("ERROR: 'date' column not found!")
     
     # Create visualizations
-    print("\n6. CREATING EXPLORATION VISUALIZATIONS")
+    print("\nCREATING EXPLORATION VISUALIZATIONS")
     print("-" * 50)
     
     # Visualization 1: Missing values overview
@@ -177,7 +177,7 @@ def main():
     plt.tight_layout()
     plt.savefig('activity1_images/1_data_exploration_overview.png', dpi=300, bbox_inches='tight')
     plt.close()
-    print("✅ Saved: data_exploration_overview.png")
+    print("[OK] Saved: data_exploration_overview.png")
     
     # Visualization 2: Dataset timeline
     plt.figure(figsize=(12, 6))
@@ -191,7 +191,7 @@ def main():
     plt.tight_layout()
     plt.savefig('activity1_images/2_dataset_timeline.png', dpi=300, bbox_inches='tight')
     plt.close()
-    print("✅ Saved: dataset_timeline.png")
+    print("[OK] Saved: dataset_timeline.png")
     
     # Save CLEANED dataset (structure cleaned, missing values NOT imputed yet)
     output_file = 'covid_data_cleaned.csv'
@@ -200,24 +200,24 @@ def main():
     # Check file size
     file_size_mb = os.path.getsize(output_file) / (1024 * 1024)
     
-    print(f"\n7. SAVING CLEANED DATASET")
+    print(f"\nSAVING CLEANED DATASET")
     print("-" * 50)
-    print(f"✅ Saved as: {output_file}")
-    print(f"✅ File size: {file_size_mb:.1f} MB")
-    print(f"✅ Note: Missing values NOT imputed yet (Activity 2 task)")
+    print(f"[OK] Saved as: {output_file}")
+    print(f"[OK] File size: {file_size_mb:.1f} MB")
+    print(f"[OK] Note: Missing values NOT imputed yet (Activity 2 task)")
     
     # Final summary
     print(f"\n" + "="*70)
     print("ACTIVITY 1 COMPLETE - SUMMARY")
     print(f"="*70)
-    print(f"✅ Dataset loaded from data/owid-covid-data.csv")
-    print(f"✅ First/last 5 rows displayed")
-    print(f"✅ Missing values analyzed: {total_missing:,} total missing")
-    print(f"✅ Dropped {len(cols_to_drop)} columns with >90% missing data")
-    print(f"✅ Date column converted to datetime")
-    print(f"✅ 2 exploration visualizations created")
-    print(f"✅ Cleaned dataset saved: {df_cleaned.shape[0]:,} rows × {df_cleaned.shape[1]} columns")
-    print(f"\n🎯 NEXT: Run Activity 2 for missing value imputation and feature engineering")
+    print(f"- Dataset loaded from data/owid-covid-data.csv")
+    print(f"- First/last 5 rows displayed")
+    print(f"- Missing values analyzed: {total_missing:,} total missing")
+    print(f"- Dropped {len(cols_to_drop)} columns with >90% missing data")
+    print(f"- Date column converted to datetime")
+    print(f"- 2 exploration visualizations created")
+    print(f"- Cleaned dataset saved: {df_cleaned.shape[0]:,} rows x {df_cleaned.shape[1]} columns")
+    print(f"\nNEXT: Run Activity 2 for missing value imputation and feature engineering")
 
 if __name__ == "__main__":
     main() 

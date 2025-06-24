@@ -8,15 +8,19 @@ COURSE: BDSE - Python for AI (PAI) Module
 PROJECT: Worldwide COVID-19 Data Analysis for ABC Health Analytics
 
 ACTIVITY 7 REQUIREMENTS (Project Brief):
-1. Fatality rate over time
-2. Positivity rate vs. total tests (log scale x-axis)
-3. Correlation of fatality rate with smoking (male/female)
-4. Heatmap: Hospital beds vs. fatality rate
+1. Visualize the fatality rate (total deaths / total cases) over time globally
+2. Explore the positivity rate (total_cases / total_tests) versus total tests 
+   conducted to analyse testing effectiveness using the x-axis as the logarithmic 
+   scale for better visualisation
+3. Analyze the fatality rate and its relationship with smoking (Use male_smokers 
+   and female_smokers columns)
+4. Create a heatmap to analyse the relationship between hospital beds per 
+   thousand and fatality rate
 
 OUTPUTS:
-- 2 executive summary dashboard visualizations (activity7_images/)
-- Advanced correlation analysis and insights
-- Comprehensive global pandemic overview
+- 4 visualizations addressing each requirement
+- Analysis of external factors affecting COVID-19 outcomes
+- Insights into testing effectiveness and health infrastructure impact
 
 USAGE: python activities/activity-7/activity-7.py
 
@@ -32,12 +36,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import warnings
+from datetime import datetime
 warnings.filterwarnings('ignore')
 
 def main():
-    print("=" * 60)
-    print("ACTIVITY 7: SUMMARY DASHBOARD")
-    print("=" * 60)
+    print("=" * 80)
+    print("ACTIVITY 7: ADDITIONAL INSIGHTS")
+    print("=" * 80)
+    print("Extracting additional insights, examining the influence of external")
+    print("factors, and evaluating regional disparities for a holistic understanding")
+    print("of the COVID-19 landscape.")
     
     # Create output folder
     os.makedirs('activity7_images', exist_ok=True)
@@ -46,266 +54,207 @@ def main():
     print("\n1. Loading processed dataset...")
     try:
         df = pd.read_csv('covid_data_processed.csv')
-        print(f"[OK] Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
+        print(f"[OK] Dataset loaded: {df.shape[0]:,} rows, {df.shape[1]} columns")
         
         # Ensure date column is datetime
         if 'date' in df.columns:
             df['date'] = pd.to_datetime(df['date'])
             print(f"[OK] Date range: {df['date'].min()} to {df['date'].max()}")
+        
+        # Calculate fatality rate where both cases and deaths exist
+        df['fatality_rate'] = np.where(
+            (df['total_cases'] > 0) & (df['total_deaths'] > 0),
+            (df['total_deaths'] / df['total_cases']) * 100,
+            np.nan
+        )
+        
+        # Calculate positivity rate where both cases and tests exist
+        if 'total_tests' in df.columns:
+            df['positivity_rate'] = np.where(
+                (df['total_tests'] > 0) & (df['total_cases'] > 0),
+                (df['total_cases'] / df['total_tests']) * 100,
+                np.nan
+            )
+        
+        print(f"[OK] Calculated rates - Fatality rate and Positivity rate")
     
     except FileNotFoundError:
         print("[ERROR] covid_data_processed.csv not found!")
-        print("Please run activities 1-2 first.")
+        print("Please run activities 1-2 first to generate the processed dataset.")
         return
     
-    print("\nGenerating comprehensive COVID-19 summary dashboard...")
+    # ==========================================================================
+    # TASK 1: Visualize the fatality rate over time globally
+    # ==========================================================================
+    print("\n2. Task 1: Global Fatality Rate Over Time...")
     
-    # Get latest data for summary statistics
-    latest_df = df.loc[df.groupby('location')['date'].idxmax()]
+    # Calculate global fatality rate over time
+    global_daily = df.groupby('date').agg({
+        'total_cases': 'sum',
+        'total_deaths': 'sum'
+    }).reset_index()
     
-    # Calculate global totals
-    global_totals = {
-        'total_cases': latest_df['total_cases'].sum(),
-        'total_deaths': latest_df['total_deaths'].sum() if 'total_deaths' in df.columns else 0,
-        'total_countries': latest_df['location'].nunique(),
-        'avg_cfr': latest_df[latest_df['total_cases'] >= 1000]['case_fatality_rate'].mean() if 'case_fatality_rate' in df.columns else 0
-    }
+    # Calculate cumulative fatality rate
+    global_daily['global_fatality_rate'] = np.where(
+        global_daily['total_cases'] > 0,
+        (global_daily['total_deaths'] / global_daily['total_cases']) * 100,
+        np.nan
+    )
     
-    print(f"\n=== GLOBAL SUMMARY ===")
-    print(f"Total Cases: {global_totals['total_cases']:,}")
-    print(f"Total Deaths: {global_totals['total_deaths']:,}")
-    print(f"Countries/Regions: {global_totals['total_countries']}")
-    print(f"Average CFR: {global_totals['avg_cfr']:.2f}%" if global_totals['avg_cfr'] > 0 else "")
-    
-    # 1. Executive Summary Dashboard
-    fig = plt.figure(figsize=(20, 16))
-    gs = fig.add_gridspec(4, 4, hspace=0.3, wspace=0.3)
-    
-    # Global Timeline (top section)
-    ax1 = fig.add_subplot(gs[0, :2])
-    if 'date' in df.columns and 'new_cases' in df.columns:
-        daily_global = df.groupby('date')['new_cases'].sum()
-        daily_global_ma = daily_global.rolling(window=7).mean()
+    if not global_daily.empty:
+        # Create subplot layout
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={'height_ratios': [2, 1]})
         
-        ax1.fill_between(daily_global.index, daily_global.values, alpha=0.3, color='steelblue')
-        ax1.plot(daily_global.index, daily_global_ma.values, color='darkblue', linewidth=2)
-        ax1.set_title('Global Daily New Cases (7-day MA)', fontsize=12, fontweight='bold')
-        ax1.set_ylabel('New Cases')
-        ax1.tick_params(axis='x', rotation=45)
+        # Plot 1: Global fatality rate timeline
+        ax1.plot(global_daily['date'], global_daily['global_fatality_rate'], 
+                 color='darkred', linewidth=2, label='Global Fatality Rate')
+        ax1.fill_between(global_daily['date'], global_daily['global_fatality_rate'], 
+                         alpha=0.3, color='darkred')
+        ax1.set_title('Global COVID-19 Fatality Rate Over Time\n(Total Deaths / Total Cases)', 
+                      fontsize=16, fontweight='bold', pad=20)
+        ax1.set_xlabel('Date', fontsize=12)
+        ax1.set_ylabel('Fatality Rate (%)', fontsize=12)
         ax1.grid(True, alpha=0.3)
-    
-    # Global Deaths Timeline
-    ax2 = fig.add_subplot(gs[0, 2:])
-    if 'date' in df.columns and 'new_deaths' in df.columns:
-        daily_deaths = df.groupby('date')['new_deaths'].sum()
-        daily_deaths_ma = daily_deaths.rolling(window=7).mean()
+        ax1.legend(fontsize=11)
         
-        ax2.fill_between(daily_deaths.index, daily_deaths.values, alpha=0.3, color='darkred')
-        ax2.plot(daily_deaths.index, daily_deaths_ma.values, color='darkred', linewidth=2)
-        ax2.set_title('Global Daily Deaths (7-day MA)', fontsize=12, fontweight='bold')
-        ax2.set_ylabel('New Deaths')
-        ax2.tick_params(axis='x', rotation=45)
-        ax2.grid(True, alpha=0.3)
-    
-    # Top Countries by Cases
-    ax3 = fig.add_subplot(gs[1, :2])
-    if 'location' in df.columns and 'total_cases' in df.columns:
-        top_cases = latest_df.nlargest(10, 'total_cases')
-        bars = ax3.barh(top_cases['location'], top_cases['total_cases'], color='steelblue', alpha=0.8)
-        ax3.set_title('Top 10 Countries by Total Cases', fontsize=12, fontweight='bold')
-        ax3.set_xlabel('Total Cases')
+        # Add annotations for key periods
+        max_rate_idx = global_daily['global_fatality_rate'].idxmax()
+        max_rate_date = global_daily.loc[max_rate_idx, 'date']
+        max_rate_value = global_daily.loc[max_rate_idx, 'global_fatality_rate']
         
-        # Add value labels
-        for bar, value in zip(bars, top_cases['total_cases']):
-            ax3.text(bar.get_width() + value*0.01, bar.get_y() + bar.get_height()/2.,
-                     f'{value/1e6:.1f}M', ha='left', va='center', fontsize=8)
-    
-    # Regional Distribution Pie Chart
-    ax4 = fig.add_subplot(gs[1, 2:])
-    region_col = None
-    for col in ['continent', 'who_region', 'region']:
-        if col in df.columns:
-            region_col = col
-            break
-    
-    if region_col:
-        regional_cases = latest_df.groupby(region_col)['total_cases'].sum().sort_values(ascending=False)
-        ax4.pie(regional_cases.values, labels=regional_cases.index, autopct='%1.1f%%', startangle=90)
-        ax4.set_title(f'Cases Distribution by {region_col.title()}', fontsize=12, fontweight='bold')
-    
-    # Monthly Trend Analysis
-    ax5 = fig.add_subplot(gs[2, :2])
-    if 'month_name' in df.columns and 'new_cases' in df.columns:
-        month_order = ['January', 'February', 'March', 'April', 'May', 'June',
-                       'July', 'August', 'September', 'October', 'November', 'December']
-        monthly_cases = df.groupby('month_name')['new_cases'].sum()
-        monthly_cases = monthly_cases.reindex([m for m in month_order if m in monthly_cases.index])
+        ax1.annotate(f'Peak: {max_rate_value:.2f}%\n{max_rate_date.strftime("%b %Y")}',
+                     xy=(max_rate_date, max_rate_value),
+                     xytext=(max_rate_date, max_rate_value + 0.5),
+                     arrowprops=dict(arrowstyle='->', color='red', lw=1.5),
+                     fontsize=10, ha='center',
+                     bbox=dict(boxstyle='round,pad=0.3', facecolor='yellow', alpha=0.8))
         
-        ax5.bar(monthly_cases.index, monthly_cases.values, color='green', alpha=0.8)
-        ax5.set_title('Total Cases by Month (All Years)', fontsize=12, fontweight='bold')
-        ax5.set_ylabel('Total New Cases')
-        ax5.tick_params(axis='x', rotation=45)
-    
-    # Case Fatality Rate by Top Countries
-    ax6 = fig.add_subplot(gs[2, 2:])
-    if 'case_fatality_rate' in df.columns and 'location' in df.columns:
-        # Get countries with high case counts for reliable CFR
-        high_case_countries = latest_df[latest_df['total_cases'] >= 100000]
-        top_cfr = high_case_countries.nlargest(10, 'case_fatality_rate')
-        
-        bars = ax6.barh(top_cfr['location'], top_cfr['case_fatality_rate'], color='orange', alpha=0.8)
-        ax6.set_title('Top 10 CFR (Countries >100k cases)', fontsize=12, fontweight='bold')
-        ax6.set_xlabel('Case Fatality Rate (%)')
-        
-        # Add value labels
-        for bar, value in zip(bars, top_cfr['case_fatality_rate']):
-            ax6.text(bar.get_width() + value*0.01, bar.get_y() + bar.get_height()/2.,
-                     f'{value:.2f}%', ha='left', va='center', fontsize=8)
-    
-    # Key Statistics Summary
-    ax7 = fig.add_subplot(gs[3, :])
-    ax7.axis('off')
-    
-    # Create summary text
-    # Get top countries safely
-    top_countries = latest_df.nlargest(3, 'total_cases')
-    
-    summary_text = f"""
-GLOBAL COVID-19 PANDEMIC SUMMARY DASHBOARD
-==================================================================================================================
+        # Plot 2: Total Cases vs Total Deaths
+        ax2.plot(global_daily['date'], global_daily['total_cases'], color='blue', label='Total Cases')
+        ax2.plot(global_daily['date'], global_daily['total_deaths'], color='red', label='Total Deaths')
+        ax2.set_title('Total Cases vs. Total Deaths Over Time', fontsize=14, fontweight='bold')
+        ax2.set_xlabel('Date')
+        ax2.set_ylabel('Count (log scale)')
+        ax2.set_yscale('log')
+        ax2.legend()
+        ax2.grid(True, which='both', linestyle='--', linewidth=0.5)
 
-[GLOBAL TOTALS]
-   * Total Confirmed Cases: {global_totals['total_cases']:,.0f}
-   * Total Deaths: {global_totals['total_deaths']:,.0f}
-   * Countries/Regions Affected: {global_totals['total_countries']}
-   * Global Case Fatality Rate: {global_totals['avg_cfr']:.2f}%
+        plt.tight_layout()
+        plt.savefig('activity7_images/7.1_global_fatality_rate_over_time.png', 
+                    dpi=300, bbox_inches='tight')
+        plt.close()
+        print("[OK] Saved: 7.1_global_fatality_rate_over_time.png")
 
-[MOST AFFECTED COUNTRIES] (by total cases):
-   1. {top_countries.iloc[0]['location']}: {top_countries.iloc[0]['total_cases']:,.0f} cases
-   2. {top_countries.iloc[1]['location']}: {top_countries.iloc[1]['total_cases']:,.0f} cases
-   3. {top_countries.iloc[2]['location']}: {top_countries.iloc[2]['total_cases']:,.0f} cases
+    # ==========================================================================
+    # TASK 2: Positivity rate vs total tests (logarithmic x-axis)
+    # ==========================================================================
+    print("\n3. Task 2: Positivity Rate vs Total Tests Analysis...")
+    
+    if 'positivity_rate' in df.columns:
+        # Filter data for meaningful analysis
+        test_data = df[(df['total_tests'] > 1000) & 
+                       (df['total_cases'] > 100) & 
+                       (df['positivity_rate'] <= 100) &
+                       (df['positivity_rate'] > 0)].copy()
+        
+        if len(test_data) > 0:
+            plt.figure(figsize=(15, 10))
+            scatter = plt.scatter(test_data['total_tests'], test_data['positivity_rate'], 
+                                 alpha=0.6, c=test_data['total_cases'], 
+                                 cmap='viridis', s=30)
+            plt.xscale('log')
+            plt.xlabel('Total Tests (log scale)', fontsize=12)
+            plt.ylabel('Positivity Rate (%)', fontsize=12)
+            plt.title('COVID-19 Testing Effectiveness Analysis\nPositivity Rate vs Total Tests', 
+                      fontsize=14, fontweight='bold')
+            plt.grid(True, alpha=0.3)
+            
+            # Add colorbar
+            cbar = plt.colorbar(scatter)
+            cbar.set_label('Total Cases', fontsize=10)
+            
+            plt.tight_layout()
+            plt.savefig('activity7_images/7.2_positivity_rate_vs_total_tests.png', 
+                        dpi=300, bbox_inches='tight')
+            plt.close()
+            print("[OK] Saved: 7.2_positivity_rate_vs_total_tests.png")
+        else:
+            print("[WARNING] Insufficient testing data for positivity rate analysis")
+    else:
+        print("[WARNING] `positivity_rate` column not available for analysis.")
 
-[DATA INSIGHTS]
-   * Peak Daily Cases: {df.groupby('date')['new_cases'].sum().max():,.0f} ({df.groupby('date')['new_cases'].sum().idxmax().strftime('%B %d, %Y')})
-   * Data Coverage: {df['date'].min().strftime('%B %Y')} to {df['date'].max().strftime('%B %Y')}
-   * Total Data Points: {len(df):,} records
-"""
+    # ==========================================================================
+    # TASK 3: Fatality rate relationship with smoking
+    # ==========================================================================
+    print("\n4. Task 3: Fatality Rate vs Smoking Analysis...")
     
-    ax7.text(0.05, 0.95, summary_text, transform=ax7.transAxes, fontsize=11,
-             verticalalignment='top', fontfamily='monospace',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', alpha=0.8))
+    smoking_cols = ['male_smokers', 'female_smokers']
+    available_smoking_cols = [col for col in smoking_cols if col in df.columns]
     
-    plt.suptitle('COVID-19 GLOBAL PANDEMIC SUMMARY DASHBOARD', 
-                 fontsize=16, fontweight='bold', y=0.98)
+    if available_smoking_cols:
+        latest_df = df.loc[df.groupby('location')['date'].idxmax()]
+        smoking_data = latest_df.dropna(subset=available_smoking_cols + ['fatality_rate'])
+        
+        if len(smoking_data) > 0:
+            fig, axes = plt.subplots(1, len(available_smoking_cols), 
+                                     figsize=(8 * len(available_smoking_cols), 6), squeeze=False)
+            
+            for i, col in enumerate(available_smoking_cols):
+                sns.regplot(data=smoking_data, x=col, y='fatality_rate', ax=axes[0, i],
+                            scatter_kws={'alpha':0.5}, line_kws={'color':'red'})
+                axes[0, i].set_title(f'Fatality Rate vs {col.replace("_", " ").title()}', 
+                                   fontweight='bold')
+                axes[0, i].set_xlabel(f'{col.replace("_", " ").title()} (%)')
+                axes[0, i].set_ylabel('Fatality Rate (%)')
+                
+                corr = smoking_data[[col, 'fatality_rate']].corr().iloc[0,1]
+                axes[0, i].text(0.05, 0.95, f'Corr: {corr:.2f}', transform=axes[0, i].transAxes,
+                                fontsize=12, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+
+            plt.tight_layout()
+            plt.savefig('activity7_images/7.3_fatality_rate_vs_smoking.png', 
+                        dpi=300, bbox_inches='tight')
+            plt.close()
+            print("[OK] Saved: 7.3_fatality_rate_vs_smoking.png")
+        else:
+            print("[WARNING] Insufficient smoking data for analysis")
+    else:
+        print("[WARNING] No smoking data columns found in dataset.")
+
+    # ==========================================================================
+    # TASK 4: Heatmap: Hospital beds vs fatality rate
+    # ==========================================================================
+    print("\n5. Task 4: Hospital Beds vs Fatality Rate Analysis...")
     
-    plt.tight_layout()
-    plt.savefig('activity7_images/7.1_executive_summary_dashboard.png', dpi=300, bbox_inches='tight')
-    plt.close()
-    print("[SAVED] executive_summary_dashboard.png")
-    
-    # 2. Detailed Analysis Dashboard
-    fig, axes = plt.subplots(3, 2, figsize=(18, 15))
-    fig.suptitle('COVID-19 DETAILED ANALYSIS DASHBOARD', fontsize=16, fontweight='bold')
-    
-    # Population vs Cases Correlation
-    if 'population' in df.columns and 'total_cases' in df.columns:
-        scatter_df = latest_df[(latest_df['population'] > 1000000) & (latest_df['total_cases'] > 1000)]
-        axes[0, 0].scatter(scatter_df['population'], scatter_df['total_cases'], alpha=0.6, color='purple')
-        axes[0, 0].set_xscale('log')
-        axes[0, 0].set_yscale('log')
-        axes[0, 0].set_xlabel('Population')
-        axes[0, 0].set_ylabel('Total Cases')
-        axes[0, 0].set_title('Population vs Total Cases')
-        axes[0, 0].grid(True, alpha=0.3)
-    
-    # Deaths Per Million Distribution
-    if 'deaths_per_million' in df.columns:
-        filtered_dpm = latest_df[(latest_df['population'] > 100000) & (latest_df['deaths_per_million'] > 0)]
-        axes[0, 1].hist(filtered_dpm['deaths_per_million'], bins=30, alpha=0.7, color='darkred')
-        axes[0, 1].set_xlabel('Deaths Per Million')
-        axes[0, 1].set_ylabel('Number of Countries')
-        axes[0, 1].set_title('Distribution of Deaths Per Million')
-        axes[0, 1].axvline(filtered_dpm['deaths_per_million'].median(), color='red', 
-                          linestyle='--', label=f'Median: {filtered_dpm["deaths_per_million"].median():.0f}')
-        axes[0, 1].legend()
-    
-    # Quarterly Trends
-    if 'quarter' in df.columns and 'year' in df.columns:
-        quarterly = df.groupby(['year', 'quarter'])['new_cases'].sum().reset_index()
-        quarterly['period'] = quarterly['year'].astype(str) + '-Q' + quarterly['quarter'].astype(str)
-        axes[1, 0].bar(quarterly['period'], quarterly['new_cases'], color='green', alpha=0.8)
-        axes[1, 0].set_title('Quarterly Case Trends')
-        axes[1, 0].set_ylabel('New Cases')
-        axes[1, 0].tick_params(axis='x', rotation=45)
-    
-    # Seasonal Analysis
-    if 'season' in df.columns and 'new_cases' in df.columns:
-        seasonal = df.groupby('season')['new_cases'].sum().sort_values(ascending=True)
-        axes[1, 1].barh(seasonal.index, seasonal.values, color=['lightblue', 'lightgreen', 'orange', 'lightcoral'])
-        axes[1, 1].set_title('Cases by Season')
-        axes[1, 1].set_xlabel('Total New Cases')
-    
-    # Day of Week Patterns
-    if 'day_name' in df.columns and 'new_cases' in df.columns:
-        day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        daily_avg = df.groupby('day_name')['new_cases'].mean()
-        daily_avg = daily_avg.reindex([d for d in day_order if d in daily_avg.index])
-        axes[2, 0].bar(daily_avg.index, daily_avg.values, color='teal', alpha=0.8)
-        axes[2, 0].set_title('Average Daily Cases by Day of Week')
-        axes[2, 0].set_ylabel('Average New Cases')
-        axes[2, 0].tick_params(axis='x', rotation=45)
-    
-    # Growth Rate Timeline
-    if 'date' in df.columns and 'total_cases' in df.columns:
-        global_totals_ts = df.groupby('date')['total_cases'].sum().reset_index()
-        global_totals_ts['growth_rate'] = global_totals_ts['total_cases'].pct_change() * 100
-        axes[2, 1].plot(global_totals_ts['date'], global_totals_ts['growth_rate'].rolling(7).mean(), 
-                       color='darkgreen', linewidth=2)
-        axes[2, 1].set_title('7-Day Average Growth Rate')
-        axes[2, 1].set_ylabel('Growth Rate (%)')
-        axes[2, 1].axhline(y=0, color='black', linestyle='--', alpha=0.5)
-        axes[2, 1].tick_params(axis='x', rotation=45)
-        axes[2, 1].grid(True, alpha=0.3)
-    
-    plt.tight_layout()
-    plt.savefig('activity7_images/7.2_detailed_analysis_dashboard.png', dpi=300, bbox_inches='tight')
-    plt.close()
-    print("[SAVED] detailed_analysis_dashboard.png")
-    
-    # 3. Generate Summary Report
+    hospital_col = 'hospital_beds_per_thousand'
+    if hospital_col in df.columns:
+        latest_df = df.loc[df.groupby('location')['date'].idxmax()]
+        hospital_data = latest_df.dropna(subset=[hospital_col, 'fatality_rate'])
+        
+        if len(hospital_data) > 10: # Need enough data for heatmap
+            hospital_data['hosp_bed_bins'] = pd.qcut(hospital_data[hospital_col], q=5, duplicates='drop')
+            hospital_data['fatality_rate_bins'] = pd.qcut(hospital_data['fatality_rate'], q=5, duplicates='drop')
+
+            contingency_table = pd.crosstab(hospital_data['hosp_bed_bins'], hospital_data['fatality_rate_bins'])
+            
+            plt.figure(figsize=(10, 8))
+            sns.heatmap(contingency_table, annot=True, fmt='d', cmap='YlGnBu')
+            plt.title('Heatmap of Hospital Beds per Thousand vs. Fatality Rate', fontweight='bold')
+            plt.xlabel('Fatality Rate (Quintiles)')
+            plt.ylabel('Hospital Beds per Thousand (Quintiles)')
+            plt.tight_layout()
+            plt.savefig('activity7_images/7.4_hospital_beds_vs_fatality_rate.png', 
+                        dpi=300, bbox_inches='tight')
+            plt.close()
+            print("[OK] Saved: 7.4_hospital_beds_vs_fatality_rate.png")
+        else:
+            print("[WARNING] Insufficient hospital beds data for heatmap analysis")
+    else:
+        print("[WARNING] `hospital_beds_per_thousand` column not found.")
+
     print("\n" + "="*80)
-    print("COVID-19 COMPREHENSIVE ANALYSIS REPORT")
-    print("="*80)
-    
-    print(f"\nDATA OVERVIEW:")
-    print(f"- Dataset Size: {len(df):,} records")
-    print(f"- Countries/Regions: {df['location'].nunique()}")
-    print(f"- Date Range: {df['date'].min().strftime('%B %d, %Y')} to {df['date'].max().strftime('%B %d, %Y')}")
-    print(f"- Total Days: {(df['date'].max() - df['date'].min()).days} days")
-    
-    print(f"\nGLOBAL STATISTICS:")
-    print(f"- Total Confirmed Cases: {global_totals['total_cases']:,}")
-    print(f"- Total Deaths: {global_totals['total_deaths']:,}")
-    print(f"- Global Case Fatality Rate: {global_totals['avg_cfr']:.2f}%")
-    
-    if 'date' in df.columns and 'new_cases' in df.columns:
-        peak_day = df.groupby('date')['new_cases'].sum().idxmax()
-        peak_cases = df.groupby('date')['new_cases'].sum().max()
-        print(f"- Peak Daily Cases: {peak_cases:,} on {peak_day.strftime('%B %d, %Y')}")
-    
-    print(f"\nTOP PERFORMERS:")
-    top5_cases = latest_df.nlargest(5, 'total_cases')
-    for i, (_, row) in enumerate(top5_cases.iterrows(), 1):
-        print(f"{i}. {row['location']}: {row['total_cases']:,} cases")
-    
-    if 'deaths_per_million' in df.columns:
-        print(f"\nHIGHEST DEATHS PER MILLION (Population >100k):")
-        filtered_latest = latest_df[latest_df['population'] > 100000]
-        top5_dpm = filtered_latest.nlargest(5, 'deaths_per_million')
-        for i, (_, row) in enumerate(top5_dpm.iterrows(), 1):
-            print(f"{i}. {row['location']}: {row['deaths_per_million']:,.1f} deaths per million")
-    
-    print(f"\n*** Activity 7 Complete! Check 'activity7_images' folder for dashboards. ***")
+    print("ACTIVITY 7 COMPLETE!")
+    print("Check 'activity7_images' folder for visualizations.")
     print("="*80)
 
 if __name__ == "__main__":

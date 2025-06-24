@@ -1,0 +1,44 @@
+# COVID-19 Data Analysis Project Tasks
+
+## Activity 1: Data Loading & Exploration
+- Load the dataset using Pandas
+- Display the first and last 5 rows of the DataFrame
+- Identify and handle missing values
+- Drop columns with over 90% missing values 
+- Convert the date column to datetime format
+
+## Activity 2: Data Cleaning & Feature Engineering
+- Impute missing values in relevant columns
+- Remove duplicate rows
+- Create new features (e.g., extract year and month from the date)
+- Identify unique countries and count total entries
+
+## Activity 3: Global COVID-19 Overview
+- Visualize total COVID-19 cases and deaths by WHO region using bar plots
+- Plot the global monthly trend of COVID-19 cases (line plot)
+- Use a heatmap to show correlation between total cases and deaths
+- Plot total cases over time for a specific country (e.g., India)
+
+## Activity 4: Regional Analysis
+- Create a grouped bar chart showing new cases by continent and month
+- Display yearly distribution of total cases using a box plot
+- Compare total deaths across continents (bar plot)
+- Plot monthly total case trends
+
+## Activity 5: Time Series Analysis
+- Line plots for daily trends of new cases and new deaths globally
+- Calculate and plot daily averages of new cases and deaths
+- Visualize global vaccination coverage trends over time
+- Analyze global trends in testing and positivity rates
+
+## Activity 6: In-Depth Country Analysis
+- Visualize the evolution of total cases and deaths over time for a chosen country
+- Accept user input for country and metric (total_cases or total_deaths) and plot a line chart
+- Box plot of total cases by continent
+- Monthly trend analysis of new cases for the selected country, grouped by year
+
+## Activity 7: Additional Insights
+- Plot global fatality rate over time (total_deaths / total_cases)
+- Use a scatter plot (log scale on x-axis) to explore positivity rate vs. number of tests
+- Investigate fatality rate correlation with male and female smoking rates
+- Create a heatmap showing correlation between hospital beds per thousand and fatality rate

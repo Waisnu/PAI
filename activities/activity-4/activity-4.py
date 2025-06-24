@@ -94,7 +94,7 @@ def main():
         plt.tight_layout()
         plt.savefig('activity4_images/4.1_new_cases_by_region_month.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] new_cases_by_region_month.png")
+        print("[OK] Saved: new_cases_by_region_month.png")
     
     # 2. Total Cases by Year (Box Plot)
     if 'total_cases' in df.columns and 'year' in df.columns:
@@ -110,7 +110,7 @@ def main():
         plt.tight_layout()
         plt.savefig('activity4_images/4.2_total_cases_by_year_boxplot.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] total_cases_by_year_boxplot.png")
+        print("[OK] Saved: total_cases_by_year_boxplot.png")
     
     # 3. Total Deaths by Region
     if 'total_deaths' in df.columns:
@@ -134,7 +134,7 @@ def main():
         plt.tight_layout()
         plt.savefig('activity4_images/4.3_total_deaths_by_region.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] total_deaths_by_region.png")
+        print("[OK] Saved: total_deaths_by_region.png")
     
     # 4. Monthly Analysis (Multiple Metrics)
     if 'month_name' in df.columns:
@@ -163,9 +163,11 @@ def main():
             axes[0, 1].tick_params(axis='x', rotation=45)
         
         # Case fatality rate by month
-        if 'case_fatality_rate' in df.columns:
-            monthly_cfr = df.groupby('month_name')['case_fatality_rate'].mean()
-            monthly_cfr = monthly_cfr.reindex([m for m in month_order if m in monthly_cfr.index])
+        if 'total_cases' in df.columns and 'total_deaths' in df.columns:
+            # Recalculate CFR monthly
+            monthly_totals = df.groupby('month_name').agg({'new_cases': 'sum', 'new_deaths': 'sum'})
+            monthly_totals['case_fatality_rate'] = (monthly_totals['new_deaths'] / monthly_totals['new_cases'] * 100)
+            monthly_cfr = monthly_totals['case_fatality_rate'].reindex([m for m in month_order if m in monthly_totals.index])
             axes[1, 0].bar(monthly_cfr.index, monthly_cfr.values, color='orange', alpha=0.8)
             axes[1, 0].set_title('Average Case Fatality Rate by Month')
             axes[1, 0].set_ylabel('CFR (%)')
@@ -190,7 +192,7 @@ def main():
         plt.tight_layout()
         plt.savefig('activity4_images/4.4_monthly_analysis.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("[SAVED] monthly_analysis.png")
+        print("[OK] Saved: monthly_analysis.png")
     
     # 5. Regional Summary Table
     latest_df = df.loc[df.groupby('location')['date'].idxmax()]
