@@ -111,57 +111,6 @@ python run.py all
 | `npm run clean` | Remove all generated files | 5 sec |
 
 ---
-
-
-## 📋 **Project Brief Alignment**
-
-This project implements all requirements from the BDSE PAI Module:
-
-### **Activity 1: Data Loading and Exploration**
-- ✅ Load COVID-19 DataFrame  
-- ✅ Display first/last 5 rows
-- ✅ Check missing values & handle them
-- ✅ Remove columns >90% missing
-- ✅ Convert date column to datetime
-
-### **Activity 2: Data Cleaning and Feature Engineering**  
-- ✅ Impute missing values
-- ✅ Remove duplicate rows
-- ✅ Create new features (year/month extraction)
-- ✅ Explore unique countries
-
-### **Activity 3: Worldwide COVID-19 Overview**
-- ✅ WHO Regions with cases/deaths (bar plots)
-- ✅ Worldwide monthly trend (line plot)
-- ✅ Correlation heatmap (cases vs deaths)
-- ✅ Time evolution for specific location
-
-### **Activity 4: Regional Analysis**
-- ✅ Grouped bar chart (new cases by continent/month)
-- ✅ Distribution by year (box plot)
-- ✅ Deaths across continents (bar plot)
-- ✅ Month-by-month cases analysis
-
-### **Activity 5: Time Series Analysis**
-- ✅ Daily trend of new cases/deaths (line plots)
-- ✅ Daily averages globally  
-- ✅ Vaccination coverage over time
-- ✅ Tests and positive rate analysis
-
-### **Activity 6: In-Depth Country Analysis**
-- ✅ Specific country cases/deaths over time
-- ✅ User input for country/metric selection
-- ✅ Continental distribution (box plot)
-- ✅ Year-wise monthly trends by country
-
-### **Activity 7: Additional Insights**  
-- ✅ Fatality rate over time globally
-- ✅ Positivity rate vs total tests (log scale)
-- ✅ Fatality rate relationship with smoking
-- ✅ Heatmap: Hospital beds vs fatality rate
-
----
-
 ## 🖼️ **Full Project Gallery**
 
 <details>
@@ -236,6 +185,55 @@ This project implements all requirements from the BDSE PAI Module:
 | ![Fatality vs. Smoking](project-charts-images-backup/activity7_images_backup/7.3_fatality_rate_vs_smoking.png) | ![Hospital Beds vs. Fatality](project-charts-images-backup/activity7_images_backup/7.4_hospital_beds_vs_fatality_rate.png) |
 
 </details>
+
+---
+
+## 📋 **Project Brief Alignment**
+
+This project implements all requirements from the BDSE PAI Module:
+
+### **Activity 1: Data Loading and Exploration**
+- ✅ Load COVID-19 DataFrame  
+- ✅ Display first/last 5 rows
+- ✅ Check missing values & handle them
+- ✅ Remove columns >90% missing
+- ✅ Convert date column to datetime
+
+### **Activity 2: Data Cleaning and Feature Engineering**  
+- ✅ Impute missing values
+- ✅ Remove duplicate rows
+- ✅ Create new features (year/month extraction)
+- ✅ Explore unique countries
+
+### **Activity 3: Worldwide COVID-19 Overview**
+- ✅ WHO Regions with cases/deaths (bar plots)
+- ✅ Worldwide monthly trend (line plot)
+- ✅ Correlation heatmap (cases vs deaths)
+- ✅ Time evolution for specific location
+
+### **Activity 4: Regional Analysis**
+- ✅ Grouped bar chart (new cases by continent/month)
+- ✅ Distribution by year (box plot)
+- ✅ Deaths across continents (bar plot)
+- ✅ Month-by-month cases analysis
+
+### **Activity 5: Time Series Analysis**
+- ✅ Daily trend of new cases/deaths (line plots)
+- ✅ Daily averages globally  
+- ✅ Vaccination coverage over time
+- ✅ Tests and positive rate analysis
+
+### **Activity 6: In-Depth Country Analysis**
+- ✅ Specific country cases/deaths over time
+- ✅ User input for country/metric selection
+- ✅ Continental distribution (box plot)
+- ✅ Year-wise monthly trends by country
+
+### **Activity 7: Additional Insights**  
+- ✅ Fatality rate over time globally
+- ✅ Positivity rate vs total tests (log scale)
+- ✅ Fatality rate relationship with smoking
+- ✅ Heatmap: Hospital beds vs fatality rate
 
 
 ---
