@@ -1,16 +1,18 @@
 # COVID-19 Data Analysis Project
 
-**A comprehensive COVID-19 data analysis system with automated setup for Windows, macOS, and Linux.**
+**A comprehensive COVID-19 data analysis system with automated setup for Lithan Python Module**
 
 ---
 
 ## 🚀 **QUICK START**
 
-### **Clone & Setup (One Command)**
+### **Clone & Setup** 
+
 ```bash
 git clone <repository-url>
 cd python-scripts
 npm run setup
+npm run all
 ```
 
 **That's it!** The setup script will:
@@ -91,20 +93,6 @@ python run.py all
 📄 covid_data_processed.csv    ← Feature-engineered dataset
 ```
 
-### **Analysis Coverage**
-- **300K+ data records** from 2020-2023
-- **200+ countries/regions** analyzed  
-- **600M+ COVID cases** processed
-- **28 visualizations** generated automatically
-
----
-
-## ⚡ **Performance**
-
-- **First run**: 5-10 minutes (setup + processing)
-- **Subsequent runs**: 30 seconds (skips existing outputs)
-- **Individual activities**: 30-60 seconds each
-
 ---
 
 ## 🔧 **Available Commands**
@@ -124,37 +112,6 @@ python run.py all
 
 ---
 
-## 🆘 **Troubleshooting**
-
-### **"Python not found"**
-```bash
-# Install Python from python.org
-# Windows: Check "Add Python to PATH" during installation
-# macOS: brew install python3
-# Linux: sudo apt install python3 python3-pip
-```
-
-### **"npm not found"**
-```bash
-# Use Python commands instead:
-python run.py setup
-python run.py all
-```
-
-### **"Permission denied" (Windows)**
-```powershell
-# Run PowerShell as Administrator:
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-### **Virtual environment issues**
-```bash
-# Manual activation:
-# Windows: venv\Scripts\activate.bat
-# macOS/Linux: source venv/bin/activate
-```
-
----
 
 ## 📋 **Project Brief Alignment**
 
@@ -205,9 +162,111 @@ This project implements all requirements from the BDSE PAI Module:
 
 ---
 
-## 📝 **Notes**
+## 🖼️ **Full Project Gallery**
 
-- Virtual environments (`venv/`, `covid_analysis_env/`) are excluded from git
-- Generated images and processed data are excluded from git  
-- All outputs are regenerated automatically when needed
-- Use `npm run clean` to reset and start fresh 
+<details>
+<summary><strong>Activity 1: Data Loading & Exploration</strong></summary>
+
+| Data Exploration Overview | Dataset Timeline |
+| :---: | :---: |
+| ![Data Exploration Overview](activity1_images/1_data_exploration_overview.png) | ![Dataset Timeline](activity1_images/2_dataset_timeline.png) |
+
+</details>
+
+<details>
+<summary><strong>Activity 2: Data Cleaning & Feature Engineering</strong></summary>
+
+| Missing Values Before/After | New Features Overview |
+| :---: | :---: |
+| ![Missing Values Before/After](activity2_images/1_missing_values_before_after.png) | ![New Features Overview](activity2_images/2_new_features_overview.png) |
+
+</details>
+
+<details>
+<summary><strong>Activity 3: Global COVID-19 Overview</strong></summary>
+
+| WHO Regions Cases/Deaths | Monthly Worldwide Trend |
+| :---: | :---: |
+| ![WHO Regions Cases/Deaths](activity3_images/3.1_who_regions_cases_deaths.png) | ![Monthly Worldwide Trend](activity3_images/3.2_monthly_worldwide_trend.png) |
+| **Correlation Heatmap** | **Cases Evolution in India** |
+| ![Correlation Heatmap](activity3_images/3_correlation_heatmap_cases_deaths.png) | ![Cases Evolution in India](activity3_images/4_evolution_total_cases_india.png) |
+
+</details>
+
+<details>
+<summary><strong>Activity 4: Regional Analysis</strong></summary>
+
+| New Cases by Region/Month | Total Cases by Year (Box Plot) |
+| :---: | :---: |
+| ![New Cases by Region/Month](activity4_images/4.1_new_cases_by_region_month.png) | ![Total Cases by Year (Box Plot)](activity4_images/4.2_total_cases_by_year_boxplot.png) |
+| **Total Deaths by Region** | **Monthly Analysis** |
+| ![Total Deaths by Region](activity4_images/4.3_total_deaths_by_region.png) | ![Monthly Analysis](activity4_images/4.4_monthly_analysis.png) |
+
+</details>
+
+<details>
+<summary><strong>Activity 5: Time Series Analysis (Corrected)</strong></summary>
+
+| Daily Trends and Averages | Global Vaccination Trends |
+| :---: | :---: |
+| ![Daily Trends and Averages](activity5_images/5.1_daily_trends_and_averages.png) | ![Global Vaccination Trends](activity5_images/5.2_global_vaccination_trends.png) |
+| **Testing and Positivity Trends** |
+| ![Testing and Positivity Trends](activity5_images/5.3_testing_and_positivity_trends.png) |
+
+</details>
+
+<details>
+<summary><strong>Activity 6: In-Depth Country Analysis (Corrected)</strong></summary>
+
+| Country Evolution (USA) | Cases by Continent (Box Plot) |
+| :---: | :---: |
+| ![Country Evolution (USA)](activity6_images/6.1_country_evolution_United_States.png) | ![Cases by Continent (Box Plot)](activity6_images/6.2_cases_by_continent_boxplot.png) |
+| **Monthly Trend (USA)** |
+| ![Monthly Trend (USA)](activity6_images/6.3_monthly_trend_United_States.png) |
+
+</details>
+
+<details>
+<summary><strong>Activity 7: Additional Insights</strong></summary>
+
+| Global Fatality Rate | Positivity Rate vs. Tests |
+| :---: | :---: |
+| ![Global Fatality Rate](activity7_images/7.1_global_fatality_rate_over_time.png) | ![Positivity Rate vs. Tests](activity7_images/7.2_positivity_rate_vs_total_tests.png) |
+| **Fatality vs. Smoking** | **Hospital Beds vs. Fatality** |
+| ![Fatality vs. Smoking](activity7_images/7.3_fatality_rate_vs_smoking.png) | ![Hospital Beds vs. Fatality](activity7_images/7.4_hospital_beds_vs_fatality_rate.png) |
+
+</details>
+
+___
+
+## 🆘 **Troubleshooting**
+
+### **"Python not found"**
+```bash
+# Install Python from python.org
+# Windows: Check "Add Python to PATH" during installation
+# macOS: brew install python3
+# Linux: sudo apt install python3 python3-pip
+```
+
+### **"npm not found"**
+```bash
+# Use Python commands instead:
+python run.py setup
+python run.py all
+```
+
+### **"Permission denied" (Windows)**
+```powershell
+# Run PowerShell as Administrator:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### **Virtual environment issues**
+```bash
+# Manual activation:
+# Windows: venv\Scripts\activate.bat
+# macOS/Linux: source venv/bin/activate
+```
+
+---
