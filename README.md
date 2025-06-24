@@ -238,35 +238,52 @@ This project implements all requirements from the BDSE PAI Module:
 </details>
 
 ___
+## 🆘️ **Troubleshooting**
 
-## 🆘 **Troubleshooting**
+### ⚠️ **"Python not found"**
+This error indicates Python is either not installed or not added to your system's environment variables (PATH).
 
-### **"Python not found"**
+#### ✅ **How to Fix**
+- 📅 **[Download Python](https://www.python.org/downloads/)**  
+  Choose the latest version compatible with your OS.
+
+- During installation on **Windows**, ensure you enable:  
+  ☑️ *"Add Python to PATH"* checkbox.
+
+- For **macOS**, use Homebrew:
+  ```bash
+  brew install python3
+  ```
+
+- For **Linux (Debian/Ubuntu)**:
+  ```bash
+  sudo apt update
+  sudo apt install python3 python3-pip
+  ```
+
+🧪 **Verify Installation**:
 ```bash
-# Install Python from python.org
-# Windows: Check "Add Python to PATH" during installation
-# macOS: brew install python3
-# Linux: sudo apt install python3 python3-pip
-```
-
-### **"npm not found"**
-```bash
-# Use Python commands instead:
-python run.py setup
-python run.py all
-```
-
-### **"Permission denied" (Windows)**
-```powershell
-# Run PowerShell as Administrator:
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-### **Virtual environment issues**
-```bash
-# Manual activation:
-# Windows: venv\Scripts\activate.bat
-# macOS/Linux: source venv/bin/activate
+python --version
+pip --version
 ```
 
 ---
+
+### ⚠️ **"npm not found"**
+This error means `npm` (Node Package Manager) is not installed or not available in your terminal.
+
+#### ✅ **Use Python Scripts Instead**
+If you're not using Node.js tooling, skip `npm` and run the equivalent Python scripts:
+```bash
+python run.py setup   # Set up your environment or config
+python run.py all     # Run the full analysis pipeline
+```
+
+#### 📦 **Need npm? Install Node.js + npm:**
+- 📅 **[Download Node.js](https://nodejs.org/)** (includes `npm`)
+
+🧪 **Verify Installation**:
+```bash
+npm --version
+node --version
+```

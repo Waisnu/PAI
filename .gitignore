@@ -27,3 +27,7 @@ activity5_images/
 activity6_images/
 activity7_images/
 
+#generated csv files
+covid_data_cleaned.csv
+covid_data_processed.csv
+
