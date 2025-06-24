@@ -19,7 +19,11 @@ __pycache__/
 Thumbs.db
 
 # Output files that get regenerated
-*.png
-outputs/images/*.png
-outputs/processed/*.csv
-outputs/reports/*.txt 
+activity1_images/
+activity2_images/
+activity3_images/
+activity4_images/
+activity5_images/
+activity6_images/
+activity7_images/
+
